@@ -1,0 +1,23 @@
+name: Atualizar contador
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update-contador:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Atualizar visitas
+        run: |
+          VISITAS=$(jq ".visitas + 1" contador.json)
+          echo "{\"visitas\": $VISITAS}" > contador.json
+
+      - name: Commit e push
+        run: |
+          git config user.email "bot@example.com"
+          git config user.name "contador-bot"
+          git add contador.json
+          git commit -m "Update contador"
+          git push
